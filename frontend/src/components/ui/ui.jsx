@@ -4,12 +4,18 @@
 
 import { useState, useRef, useCallback } from "react";
 import ReactFlow, { Controls, Background, MiniMap } from "reactflow";
-import { useStore } from "./store/useStore";
+import { useStore } from "../../store/useStore";
 import { useShallow } from "zustand/react/shallow";
-import { InputNode } from "./components/nodes/inputNode";
-import { LLMNode } from "./components/nodes/llmNode";
-import { OutputNode } from "./components/nodes/outputNode";
-import { TextNode } from "./components/nodes/textNode";
+import { InputNode } from "../nodes/inputNode";
+import { LLMNode } from "../nodes/llmNode";
+import { OutputNode } from "../nodes/outputNode";
+import { TextNode } from "../nodes/textNode";
+import { DateNode } from "../nodes/DateNode";
+import { TimeNode } from "../nodes/TimeNode";
+import { NoteNode } from "../nodes/NoteNode";
+import { ToggleNode } from "../nodes/ToggleNode";
+import { MathNode } from "../nodes/MathNode";
+import { ButtonEdge } from "./ButtonEdge";
 
 import "reactflow/dist/style.css";
 
@@ -20,6 +26,15 @@ const nodeTypes = {
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
+  date: DateNode,
+  time: TimeNode,
+  note: NoteNode,
+  toggle: ToggleNode,
+  math: MathNode,
+};
+
+const edgeTypes = {
+  buttonedge: ButtonEdge,
 };
 
 const selector = (state) => ({
@@ -92,7 +107,7 @@ export const PipelineUI = () => {
 
   return (
     <>
-      <div ref={reactFlowWrapper} style={{ width: "100wv", height: "70vh" }}>
+      <div ref={reactFlowWrapper} style={{ width: "100wv", height: "100vh" }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -103,15 +118,12 @@ export const PipelineUI = () => {
           onDragOver={onDragOver}
           onInit={setReactFlowInstance}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           proOptions={proOptions}
           snapGrid={[gridSize, gridSize]}
           connectionLineType="smoothstep"
         >
-          <Background
-            color="#000000ff"
-            style={{ border: "2px solid #000" }}
-            gap={gridSize}
-          />
+          <Background color="#000000ff" gap={gridSize} />
           <Controls />
           <MiniMap />
         </ReactFlow>
